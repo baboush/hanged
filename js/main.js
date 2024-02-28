@@ -26,7 +26,7 @@ const GetWord = () => {
  *
  * Display buttons alpha in document
  */
-const GenerateAlpha = () => {
+const GenerateAlphaBoard = () => {
   const ALPHA = "abcdefghijklmnopqrstuvwxyz";
   const SPLIT_ALPHA = ALPHA.split("");
 
@@ -67,7 +67,7 @@ const BuildHiddenWord = (word) => {
  *
  * Display  gameboard with letters hidde
  */
-const GenerateGameboard = (word) => {
+const GenerateGameboardLetter = (word) => {
   const wordHiddeTemp = [...word];
   for (const letter of wordHiddeTemp) {
     let letterBlock = document.createElement("span");
@@ -100,19 +100,6 @@ const CheckIsWin = (goodWord, health) => {
       ` avec: ${healthTemp} erreurs`,
     );
   }
-};
-
-/**
- * @Param goodWord array string
- * @Param health number
- *
- *  Check letter and check loose
- *
- * Display loose modal
- */
-const CheckIsLoose = (goodWord, health) => {
-  const goodWordTemp = goodWord;
-  const healthTemp = health;
   if (healthTemp >= 6) {
     DisplayModal(
       `DOMMAGE, vous n'avez pas trouve le mot: ${goodWordTemp.join("")}`,
@@ -143,6 +130,7 @@ const DisplayModal = (message, health) => {
   modal.appendChild(btnQuit);
   modal.appendChild(btnRestart);
   btnRestart.addEventListener("click", () => location.reload());
+  btnQuit.addEventListener("click", () => window.close());
 };
 
 /**
@@ -179,11 +167,10 @@ const CheckIsInWord = (word, letter, health) => {
     ReplaceLetterInHiddenWord(checkWord, letter);
     CheckIsWin(checkWord, healthTemp);
     return true;
-  } else {
-    BODY.style.backgroundColor = `red`;
-    AddImgHanggman(healthTemp);
-    CheckIsLoose(checkWord, healthTemp);
   }
+  BODY.style.backgroundColor = `red`;
+  AddImgHanggman(healthTemp);
+  CheckIsWin(checkWord, healthTemp);
 };
 
 /**
@@ -226,7 +213,8 @@ const UserPlay = (word) => {
 };
 // main
 const word = GetWord();
-GenerateAlpha();
+GenerateAlphaBoard();
+
 const hiddenWord = BuildHiddenWord(word);
-GenerateGameboard(hiddenWord);
+GenerateGameboardLetter(hiddenWord);
 const Init = () => UserPlay(word);
